@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Year's Prize Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="fireworks"></canvas>
+
+    <div class="container">
+        <h1 class="title">🎉 New Year's Prize Game 🎉</h1>
+
+        <!-- Red Lion Image -->
+        <img src="red-lion.png" alt="Red Lion" class="lion">
+
+        <p class="subtitle">Pick an envelope to reveal your New Year's luck!</p>
+
+        <div id="envelope-container" class="envelope-container">
+            <!-- Envelopes will be generated using JS -->
+        </div>
+
+        <div class="buttons">
+            <button id="play-again">Play Again</button>
+            <button id="play-music">Play Music</button>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="music.mp3" loop></audio>
+    <audio id="open-sound" src="open.mp3"></audio>
+
+    <script src="fireworks.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
