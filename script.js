@@ -6,23 +6,23 @@ const openSound = document.getElementById("open-sound");
 
 // Prize probability
 const prizes = [
-    { text: "1000 Naira", chance: 0.10 },
-    { text: "2500 Naira", chance: 0.05 },
-    { text: "Next Time!", chance: 0.10 },
-    { text: "500 Naira", chance: 0.25 },
-    { text: "800 Naira", chance: 0.25 },
-    { text: "700 Naira", chance: 0.25 }
+    { text: "1000 Naira", chance: 0.10, big: true },
+    { text: "2500 Naira", chance: 0.05, big: true },
+    { text: "Next Time!", chance: 0.10, big: false },
+    { text: "500 Naira", chance: 0.25, big: false },
+    { text: "800 Naira", chance: 0.25, big: false },
+    { text: "700 Naira", chance: 0.25, big: false }
 ];
 
 function getRandomPrize() {
     const r = Math.random();
-    let cumulative = 0;
+    let sum = 0;
 
     for (let p of prizes) {
-        cumulative += p.chance;
-        if (r < cumulative) return p.text;
+        sum += p.chance;
+        if (r < sum) return p;
     }
-    return "Next Time!";
+    return prizes[2]; // fallback to Next Time
 }
 
 function shuffle(arr) {
@@ -34,28 +34,48 @@ function renderEnvelopes() {
     const numbers = shuffle([1, 2, 3, 4, 5, 6]);
 
     numbers.forEach(num => {
-        const div = document.createElement("div");
-        div.className = "envelope";
-        div.textContent = num;
 
-        div.onclick = () => {
-            if (div.classList.contains("opened")) return;
+        const envelope = document.createElement("div");
+        envelope.className = "envelope";
 
-            // play open sound
+        envelope.innerHTML = `
+            <div class="envelope-inner">
+                <div class="envelope-front">${num}</div>
+                <div class="envelope-back"></div>
+            </div>
+        `;
+
+        envelope.onclick = () => {
+
+            if (envelope.classList.contains("opened")) return;
+
+            // Shake effect
+            envelope.classList.add("shake");
+            setTimeout(() => envelope.classList.remove("shake"), 350);
+
+            // Open sound
             openSound.play();
 
-            // animation
-            div.classList.add("opened");
+            // Prize
+            const prizeObj = getRandomPrize();
+            const back = envelope.querySelector(".envelope-back");
 
-            setTimeout(() => {
-                div.textContent = getRandomPrize();
-            }, 300);
+            back.textContent = prizeObj.text;
+
+            // Glow effect for big prizes
+            if (prizeObj.big) {
+                back.classList.add("glow-gold");
+            }
+
+            // Flip animation
+            envelope.classList.add("opened");
         };
 
-        envelopeContainer.appendChild(div);
+        envelopeContainer.appendChild(envelope);
     });
 }
 
+// Buttons
 playAgainBtn.onclick = () => {
     renderEnvelopes();
 };
